@@ -3,11 +3,10 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
-var lwip = require('lwip');
+var Jimp = require("jimp");
 var exphbs = require('express-handlebars');
 var formidable = require('formidable');
 var fs = require('fs');
-var sharp = require('sharp');
 var app = express();
 
 // view engine setup
@@ -40,13 +39,11 @@ app.post('/upload', function(req, res) {
   form.uploadDir = path.join(__dirname, '/uploads');
   form.on('file', function(field, file) {
     fs.rename(file.path, path.join(form.uploadDir, file.name));
-    lwip.open(path.join(form.uploadDir, file.name), function(err, image){
-        image.cover(320,320, function(err, image){
-            image.writeFile(path.join(__dirname, 'public', 'resized-images', file.name), function(err){
-                if (err != null)
-                    console.log(err);
-            });
-        });
+    Jimp.read(path.join(form.uploadDir, file.name), function (err, image) {
+        if (err) throw err;
+        image.cover(320, 320)            // resize
+             .quality(60)                 // set JPEG quality
+             .write(path.join(__dirname, 'public', 'resized-images', file.name)); // save
     });
   });
   form.on('error', function(err) {
@@ -94,4 +91,4 @@ app.use(function(err, req, res, next) {
 
 app.listen(8000, function () {
   console.log('Example app listening on port 3000!')
-})
+});
