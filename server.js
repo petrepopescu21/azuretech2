@@ -25,8 +25,10 @@ app.get('/', function (req, res) {
 app.get('/images', function (req,res) {
   fs.readdir(path.join(__dirname, 'public', 'resized-images'), (err, files) => {
     var files_array = Array();
+    if (files!==undefined)
     files.forEach(file => {
-        files_array.push(file);
+        if(file!=".gitignore")
+            files_array.push(file);
     });
     res.render('images',{"img":files_array});
   });
