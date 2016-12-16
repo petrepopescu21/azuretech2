@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function (req, res) {
-    res.render('index', {});
+    res.render('index', {"home_nav":true});
 });
 
 app.get('/images', function (req,res) {
@@ -30,7 +30,7 @@ app.get('/images', function (req,res) {
         if(file!=".gitignore")
             files_array.push(file);
     });
-    res.render('images',{"img":files_array});
+    res.render('images',{"img":files_array, "images_nav":true});
   });
 });
 
