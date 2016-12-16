@@ -46,7 +46,7 @@ app.post('/upload', function(req, res) {
              .write(path.join(__dirname, 'public', 'resized-images', file.name)); // save
     });
   });
-  
+
   form.on('error', function(err) {
     console.log('An error has occured: \n' + err);
   });
@@ -90,6 +90,6 @@ app.use(function(err, req, res, next) {
     });
 });
 
-app.listen(8000, function () {
+app.listen(process.env.port || 3000, function () {
   console.log('Example app listening on port 3000!')
 });
