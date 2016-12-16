@@ -35,17 +35,23 @@ app.get('/images', function (req,res) {
 });
 
 app.post('/upload', function(req, res) {
-   var form = new formidable.IncomingForm();
-
+  var form = new formidable.IncomingForm();
   form.multiples = true;
   form.uploadDir = path.join(__dirname, '/uploads');
   form.on('file', function(field, file) {
-    fs.rename(file.path, path.join(form.uploadDir, file.name));
-    Jimp.read(path.join(form.uploadDir, file.name), function (err, image) {
-        if (err) throw err;
-        image.cover(320, 320)            // resize
-             .quality(60)                 // set JPEG quality
-             .write(path.join(__dirname, 'public', 'resized-images', file.name)); // save
+    fs.rename(file.path, path.join(form.uploadDir, file.name), function(err) {
+        if (err != null) {
+            console.log(err);
+        }
+        else {
+            Jimp.read(path.join(form.uploadDir, file.name), function (err, image) {
+                if (err) throw err;
+                image.cover(320, 320)            // resize
+                    .quality(60)                 // set JPEG quality
+                    .write(path.join(__dirname, 'public', 'resized-images', file.name)); // save
+            });
+        }
+            
     });
   });
 
