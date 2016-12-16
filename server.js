@@ -46,6 +46,7 @@ app.post('/upload', function(req, res) {
              .write(path.join(__dirname, 'public', 'resized-images', file.name)); // save
     });
   });
+  
   form.on('error', function(err) {
     console.log('An error has occured: \n' + err);
   });
